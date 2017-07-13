@@ -138,6 +138,28 @@
 
         }
     }
+    var btnStart = document.querySelector('#start-animation');
+    btnStart.addEventListener('click', function (data) {
+        var itemAnimate = document.querySelector(".animate-item img");
+        var id = setInterval(frame, 30);
+        var width = itemAnimate.width / 10;
+        var pos = 0 + width;
+        console.log(width);
+
+        function frame() {
+            if (pos == 100) {
+                clearInterval(id);
+            } else {
+                pos++;
+                itemAnimate.style.left = pos - width + '%';
+            }
+
+
+        }
+
+    });
+
+
 
 
 }());
