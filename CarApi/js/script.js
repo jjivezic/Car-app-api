@@ -8,7 +8,6 @@
             var data = JSON.parse(request.responseText);
             displayDataFromApi(data);
             flipCard(data);
-
             chooseCarToAnimate(data);
             console.log(data)
         } else {
@@ -21,7 +20,7 @@
     };
 
     request.send();
-    //display data in Html Page
+    //Display data on page
     function displayDataFromApi(data) {
         // console.log(data.data[0].name);
         var arrElements = data.data;
@@ -48,11 +47,14 @@
             cardBack.setAttribute('style', 'background:url(' + img.src + ')');
             document.querySelector('#cars-container').appendChild(carsBox);
             cardBack.insertAdjacentHTML('beforeend', '<h2>' + element.name + '</h2>' + '<p>' + element.speed + 'km/h' + '<p>' + '<h6>' + element.description + '</h6>');
+            var btnStart = document.querySelector('#start-animation');
+            btnStart.style.display = 'none';
+
 
         }, this);
     }
 
-    //filter data by car name
+    //Filter data by car name
     document.querySelector('#filter-input').addEventListener('keyup', filterCarList);
 
     function filterCarList(data) {
@@ -71,7 +73,7 @@
             }
         }
     }
-    //flip card
+    //flipping card -toggle class
     function flipCard(data) {
         var elements = document.querySelectorAll('.flip');
 
@@ -90,40 +92,40 @@
                     if (existingIndex >= 0)
                         classes.splice(existingIndex, 1);
                     else
-                        classes.push(fliped);
+                        classes.push(flipped);
 
                     this.className = classes.join(' ');
                 }
             });
-            elements[i].addEventListener('mouseleave', function (data) {
+            // elements[i].addEventListener('mouseleave', function (data) {
 
-                if (this.classList) {
-                    this.classList.toggle('flip');
-                } else {
-                    var classes = this.className.split(' ');
-                    var existingIndex = classes.indexOf('flip');
+            // if (this.classList) {
+            //     this.classList.toggle('flipped');
+            // } else {
+            //     var classes = this.className.split(' ');
+            //     var existingIndex = classes.indexOf('flipped');
 
-                    if (existingIndex >= 0)
-                        classes.splice(existingIndex, 1);
-                    else
-                        classes.push(fliped);
+            //     if (existingIndex >= 0)
+            //         classes.splice(existingIndex, 1);
+            //     else
+            //         classes.push(flipped);
 
-                    this.className = classes.join(' ');
-                }
-            });
+            //     this.className = classes.join(' ');
+            // }
+            //  });
         }
     }
-
+    //Card is clicked and moved in the box for animation
     function chooseCarToAnimate(data) {
         var carsItem = document.querySelectorAll('.flip');
-
         for (var i = 0; i < carsItem.length; i++) {
 
             var cardBack = carsItem[i].querySelector('.card-back');
             // console.log('clcikced333', lis)
-
-
             cardBack.onclick = function (ev) {
+
+                var btnStart = document.querySelector('#start-animation');
+                btnStart.style.display = 'block';
                 this.onclick = null; //da element mozemo samo jednom kliknuti i disejblovati click event
                 if (cardBack.getAttribute("class") == "card-back") {
                     var carClicked = ev.currentTarget.previousSibling.innerHTML;
@@ -133,33 +135,43 @@
                     var listChoosenCarsToAnimate = document.querySelector('.animate-box');
                     listChoosenCarsToAnimate.insertAdjacentHTML('beforeend', '<div class="animate-item">' + carClicked + '</div>');
                 }
-
             };
-
         }
     }
+    //Animate cars depending on cars speed
     var btnStart = document.querySelector('#start-animation');
-    btnStart.addEventListener('click', function (data) {
-        var itemAnimate = document.querySelector(".animate-item img");
-        var id = setInterval(frame, 30);
-        var width = itemAnimate.width / 10;
-        var pos = 0 + width;
-        console.log(width);
+    btnStart.addEventListener('click', function (ev) {
+        var listChosenCars = ev.currentTarget.previousSibling.previousSibling.children;
+        console.log(listChosenCars);
 
-        function frame() {
-            if (pos == 100) {
-                clearInterval(id);
-            } else {
-                pos++;
-                itemAnimate.style.left = pos - width + '%';
+        (function animateCars(listChosenCars) {
+            var element = document.querySelectorAll(".animate-item img");
+            for (var i = 0; i <= element.length; i++) {
+                console.log('?????', element[i].nextElementSibling.nextElementSibling.innerText)
+                var carsSpeed = element[i].nextElementSibling.nextElementSibling.innerText;
+                var speedParse = parseInt(carsSpeed);
+                console.log(speedParse);
+                (function () {
+                    var j = i;
+                    var speed = speedParse / 10;
+                    console.log(speed)
+                    var width = element[j].width / 10;
+                    //console.log(width);
+                    var pos = 0 + width;
+                    var id = setInterval(start, speed);
+                    console.log(element[j]);
+
+                    function start() {
+                        if (pos == 100) {
+                            clearInterval(id);
+                        } else {
+                            pos++;
+                            element[j].style.left = pos - width + '%';
+                        }
+                    }
+                })();
             }
-
-
-        }
-
+        })()
     });
-
-
-
 
 }());
