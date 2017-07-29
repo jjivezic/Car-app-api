@@ -153,7 +153,7 @@
                 console.log(speedParse);
                 (function () {
                     var j = i;
-                    var speed = speedParse / 10;
+                    var speed = 50/speedParse *100;
                     console.log(speed)
                     var width = element[j].width / 10;
                     //console.log(width);
