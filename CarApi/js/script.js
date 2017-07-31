@@ -38,15 +38,14 @@
             cardFront.appendChild(img);
 
             document.querySelector('#cars-container').appendChild(carsBox);
-            cardFront.insertAdjacentHTML('beforeend', '<h2>' + element.name + '</h2>' + '<p>' + element.speed + 'km/h' + '<p>');
-            // carsBox.insertAdjacentHTML('beforeend', '<div class="card-back">' + '<h1>' + element.name + '</h1>' + '<p>' + element.speed + 'km/h' + '<p>' + '<h6>' + element.description + '</h6>' + '</div>');
+            cardFront.insertAdjacentHTML('beforeend', '<h2>' + element.name + '</h2>' + '<p>' + element.speed + 'km/h' + '</p>');
             var cardBack = document.createElement('DIV');
             cardBack.setAttribute('class', 'card-back');
             carsBox.appendChild(cardBack);
             // cardBack.appendChild(img);
             cardBack.setAttribute('style', 'background:url(' + img.src + ')');
             document.querySelector('#cars-container').appendChild(carsBox);
-            cardBack.insertAdjacentHTML('beforeend', '<h2>' + element.name + '</h2>' + '<p>' + element.speed + 'km/h' + '<p>' + '<h6>' + element.description + '</h6>');
+            cardBack.insertAdjacentHTML('beforeend', '<h2>' + element.name + '</h2>' + '<p>' + element.speed + 'km/h' + '</p>' + '<h6>' + element.description + '</h6>');
             var btnStart = document.querySelector('#start-animation');
             btnStart.style.display = 'none';
 
@@ -79,40 +78,13 @@
 
         for (var i = 0; i < elements.length; i++) {
             elements[i].addEventListener('mouseenter', function (data) {
-                //mouseenter
-                if (this.classList) {
-                    this.classList.toggle('flipped');
+                this.classList.toggle('flipped');
 
-                    // document.querySelector('.flipped').style.backgroundColor = "blue";
-                    //moveCarToAnimate(data)
-                } else {
-                    var classes = this.className.split(' ');
-                    var existingIndex = classes.indexOf('flipped');
-
-                    if (existingIndex >= 0)
-                        classes.splice(existingIndex, 1);
-                    else
-                        classes.push(flipped);
-
-                    this.className = classes.join(' ');
-                }
             });
+   
             // elements[i].addEventListener('mouseleave', function (data) {
-
-            // if (this.classList) {
-            //     this.classList.toggle('flipped');
-            // } else {
-            //     var classes = this.className.split(' ');
-            //     var existingIndex = classes.indexOf('flipped');
-
-            //     if (existingIndex >= 0)
-            //         classes.splice(existingIndex, 1);
-            //     else
-            //         classes.push(flipped);
-
-            //     this.className = classes.join(' ');
-            // }
-            //  });
+            //     this.classList.remove('flipped');
+            // });
         }
     }
     //Card is clicked and moved in the box for animation
@@ -147,26 +119,28 @@
         (function animateCars(listChosenCars) {
             var element = document.querySelectorAll(".animate-item img");
             for (var i = 0; i <= element.length; i++) {
-                console.log('?????', element[i].nextElementSibling.nextElementSibling.innerText)
-                var carsSpeed = element[i].nextElementSibling.nextElementSibling.innerText;
+
+                var carsSpeed = element[i].nextSibling.nextSibling.innerText;
                 var speedParse = parseInt(carsSpeed);
-                console.log(speedParse);
                 (function () {
                     var j = i;
-                    var speed = 50/speedParse *100;
-                    console.log(speed)
+                    var speed = 50 / speedParse * 100;
                     var width = element[j].width / 10;
                     //console.log(width);
                     var pos = 0 + width;
                     var id = setInterval(start, speed);
-                    console.log(element[j]);
 
                     function start() {
+                        // var bg = element[j].parentElement;
                         if (pos == 100) {
                             clearInterval(id);
+                            console.log('clear interval')
+                            //  element[j].parentElement.style.background = 'yellow';
+
                         } else {
                             pos++;
                             element[j].style.left = pos - width + '%';
+                            // bg.style.background = 'red'
                         }
                     }
                 })();

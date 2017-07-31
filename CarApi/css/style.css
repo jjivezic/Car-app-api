@@ -182,6 +182,14 @@ display: inline;
     color: teal;
     margin-right: 12px;
 }
+.app-frame h3 {
+    border-top: 1px solid #dad7d7;
+    border-bottom: 1px solid #dad7d7;
+    padding: 5px;
+    margin-top: 16px;
+    font-size: 18px;
+    background: #e8e8e8;
+}
 .btn-custom{
 
     background: teal;
